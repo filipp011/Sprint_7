@@ -51,5 +51,5 @@ class TestCreateOrder:
 
         # Проверяем, что в ответе содержится track
         response_data = response.json()
-        assert "track" in response_data
+        assert "track" in response_data and response.status_code == 201
 
