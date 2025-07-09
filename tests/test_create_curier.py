@@ -38,7 +38,7 @@ class TestCreateCourier:
         }
         # Отправка POST-запроса для создания второго курьера с теми же данными
         duplicate_response = requests.post(url, json=payload)
-
+        response_json = duplicate_response.json()
         # Проверка статуса ответа на попытку создания дубликата
         assert duplicate_response.status_code == 409 and response_json.get("message") == "Этот логин уже используется. Попробуйте другой." # Ожидаем статус 409 Conflict и сообщение
 
@@ -56,7 +56,7 @@ class TestCreateCourier:
         response = requests.post(url, json=payload)
 
         # Проверяем, что ответ содержит {"ok": true}
-        assert response.json() == {"ok": True}
+        assert response.json() == {"ok": True} and response.status_code == 201
 
     @pytest.mark.parametrize("login, password, expected_status", [
         ("", "valid_password", 400),  # Пустой логин
