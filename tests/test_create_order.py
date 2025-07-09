@@ -3,11 +3,10 @@ import requests
 from data import API_CREATE_ORDER_URL
 import allure
 
-@allure.feature("Create Order")
+@allure.feature("Создание заказа")
 class TestCreateOrder:
 
-    # Заказ только черного самоката
-    @allure.story("Order with different colors")
+    @allure.story("Заказ с разными цветами")
     @pytest.mark.parametrize("color, expected_status", [
         (["BLACK"], 201),  # Один цвет - BLACK
         (["GREY"], 201),   # Один цвет - GREY
@@ -23,17 +22,18 @@ class TestCreateOrder:
             "phone": "+7 800 355 35 35",
             "rentTime": 5,
             "deliveryDate": "2020-06-06",
-            "comment": "Saske, come back to Konoha",
+            "comment": "Саске, вернись в Коноху",
             "color": color
         }
         
         response = requests.post(API_CREATE_ORDER_URL, json=payload)
+        response_data = response.json()
 
         # Проверяем, что статус-код ответа соответствует ожидаемому
-        assert response.status_code == expected_status
+        assert response.status_code == expected_status and "track" in response_data
 
-    # При успешном заказе выдает track
-    @allure.story("Successful order returns track")
+    # При успешном заказе выдает трек
+    @allure.story("Успешный заказ возвращает трек")
     def test_create_order_have_track(self):
         payload = {
             "firstName": "Иван",
@@ -43,13 +43,12 @@ class TestCreateOrder:
             "phone": "+7 800 355 35 35",
             "rentTime": 5,
             "deliveryDate": "2020-06-06",
-            "comment": "Saske, come back to Konoha",
+            "comment": "Саске, вернись в Коноху",
             "color": ["BLACK", "GREY"]
         }
         
         response = requests.post(API_CREATE_ORDER_URL, json=payload)
 
-        # Проверяем, что в ответе содержится track
+        # Проверяем, что в ответе содержится трек
         response_data = response.json()
         assert "track" in response_data and response.status_code == 201
-
