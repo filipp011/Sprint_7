@@ -38,9 +38,9 @@ class TestLoginCurier:
             "password": "558855"
         }
         response = requests.post(url, json=payload)
-    
+        response_data = response.json()
         # Проверяем, что статус-код ответа 400 (ошибка)
-        assert response.status_code == 400
+        assert response.status_code == 400 and response_data.get("message") == "Недостаточно данных для входа"
         
 
     @allure.story("Курьер не найден")
