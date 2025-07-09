@@ -23,7 +23,7 @@ class TestCreateCourier:
         response = requests.post(url, json=payload)
         
         # Проверка статуса ответа
-        assert response.status_code == 201
+        assert response.status_code == 201 and response.json() == {"ok": True}
 
     @allure.title("Test Duplicate Courier Registration")
     @allure.description("Verify that registering a courier with the same login, password, and name fails.")
