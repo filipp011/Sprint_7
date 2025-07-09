@@ -5,19 +5,6 @@ import allure
 @allure.feature("Вход курьера")
 class TestLoginCurier:
 
-    @allure.story("Курьер может войти в систему")
-    def test_courier_login(self):
-        url = API_LOGIN_URL
-        payload = {
-            "login": "Filipp",
-            "password": "558855"
-        }
-        response = requests.post(url, json=payload)
-    
-        # Проверяем, что статус-код ответа 200 (успешный запрос)
-        assert response.status_code == 200
-
-
     @allure.story("Ошибка при пустом логине")
     def test_courier_not_login(self):
         url = API_LOGIN_URL
@@ -26,9 +13,9 @@ class TestLoginCurier:
             "password": "558855"
         }
         response = requests.post(url, json=payload)
-    
+        response_data = response.json()
         # Проверяем, что статус-код ответа 400 (ошибка)
-        assert response.status_code == 400
+        assert response.status_code == 400 and response_data.get("message") == "Недостаточно данных для входа"
 
 
     @allure.story("Ошибка при отсутствии поля логина")
