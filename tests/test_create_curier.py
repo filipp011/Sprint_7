@@ -75,9 +75,10 @@ class TestCreateCourier:
         }
 
         response = requests.post(url, json=payload)
+        response_data = response.json()
 
         # Проверяем, что статус-код ответа соответствует ожидаемому
-        assert response.status_code == expected_status
+        assert response.status_code == expected_status and response_data["message"] == "Недостаточно данных для создания учетной записи"
 
     @allure.title("Test Duplicate Courier Login Registration")
     @allure.description("Verify that registering a courier with the same login fails.")
