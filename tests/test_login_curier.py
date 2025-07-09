@@ -1,3 +1,4 @@
+import pytest
 import requests
 from data import API_LOGIN_URL
 import allure
@@ -5,29 +6,23 @@ import allure
 @allure.feature("Вход курьера")
 class TestLoginCurier:
 
-    @allure.story("Ошибка при пустом логине")
-    def test_courier_not_login(self):
+    @pytest.mark.parametrize("login, password, expected_status, expected_message", [
+    ("", "558855", 400, "Недостаточно данных для входа"),  # Пустой логин
+    (None, "558855", 400, "Недостаточно данных для входа")  # Отсутствие поля логина
+])
+    @allure.story("Проверка ошибок при входе курьера")
+    def test_courier_login_errors(self, login, password, expected_status, expected_message):
         url = API_LOGIN_URL
         payload = {
-            "login": "",
-            "password": "558855"
+            "login": login,
+            "password": password
         }
         response = requests.post(url, json=payload)
         response_data = response.json()
-        # Проверяем, что статус-код ответа 400 (ошибка)
-        assert response.status_code == 400 and response_data.get("message") == "Недостаточно данных для входа"
-
-
-    @allure.story("Ошибка при отсутствии поля логина")
-    def test_courier_no_field(self):
-        url = API_LOGIN_URL
-        payload = {
-            "password": "558855"
-        }
-        response = requests.post(url, json=payload)
-        response_data = response.json()
-        # Проверяем, что статус-код ответа 400 (ошибка)
-        assert response.status_code == 400 and response_data.get("message") == "Недостаточно данных для входа"
+        
+        # Проверяем, что статус-код ответа соответствует ожидаемому
+        assert response.status_code == expected_status
+        assert response_data.get("message") == expected_message
         
 
     @allure.story("Курьер не найден")

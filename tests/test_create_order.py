@@ -31,24 +31,3 @@ class TestCreateOrder:
 
         # Проверяем, что статус-код ответа соответствует ожидаемому
         assert response.status_code == expected_status and "track" in response_data
-
-    # При успешном заказе выдает трек
-    @allure.story("Успешный заказ возвращает трек")
-    def test_create_order_have_track(self):
-        payload = {
-            "firstName": "Иван",
-            "lastName": "Петрович",
-            "address": "Уляп, 142 дом.",
-            "metroStation": 4,
-            "phone": "+7 800 355 35 35",
-            "rentTime": 5,
-            "deliveryDate": "2020-06-06",
-            "comment": "Саске, вернись в Коноху",
-            "color": ["BLACK", "GREY"]
-        }
-        
-        response = requests.post(API_CREATE_ORDER_URL, json=payload)
-
-        # Проверяем, что в ответе содержится трек
-        response_data = response.json()
-        assert "track" in response_data and response.status_code == 201
