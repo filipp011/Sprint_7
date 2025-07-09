@@ -9,6 +9,6 @@ class TestListOrder:
     def test_orders_list(self):
         response = requests.get(API_LIST_ORDER_URL)
         response_data = response.json()
-        # Проверяем, что значение по ключу "orders" является списком.
-        assert isinstance(response_data.get("orders"), list) and response.status_code == 200
-        
+        # Проверяем, что значение по ключу "orders" является списком и не пустое
+        orders = response_data.get("orders")
+        assert isinstance(orders, list) and len(orders) > 0
