@@ -12,12 +12,12 @@ class TestLoginCurier:
 ])
     @allure.story("Проверка ошибок при входе курьера")
     def test_courier_login_errors(self, login, password, expected_status, expected_message):
-        url = API_LOGIN_URL
+    
         payload = {
             "login": login,
             "password": password
         }
-        response = requests.post(url, json=payload)
+        response = requests.post(API_LOGIN_URL, json=payload)
         response_data = response.json()
         
         # Проверяем, что статус-код ответа соответствует ожидаемому
@@ -27,12 +27,12 @@ class TestLoginCurier:
 
     @allure.story("Курьер не найден")
     def test_courier_not_found(self):
-        url = API_LOGIN_URL
+        
         payload = {
             "login": "петручо",
             "password": "558855"
         }
-        response = requests.post(url, json=payload)
+        response = requests.post(API_LOGIN_URL, json=payload)
         response_data = response.json()
         # Проверяем, что статус-код ответа 404 (не найдено)
         assert response.status_code == 404 and response_data.get("message") == "Учетная запись не найдена"
@@ -40,12 +40,12 @@ class TestLoginCurier:
 
     @allure.story("Успешный вход возвращает id")
     def test_courier_get_id(self):
-        url = API_LOGIN_URL
+        
         payload = {
             "login": "Filipp",
             "password": "558855"
         }
-        response = requests.post(url, json=payload)
+        response = requests.post(API_LOGIN_URL, json=payload)
         # Проверяем, что в ответе содержится id
         response_data = response.json()
         assert "id" in response_data and response.status_code == 200
