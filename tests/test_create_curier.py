@@ -40,7 +40,7 @@ class TestCreateCourier:
         duplicate_response = requests.post(url, json=payload)
 
         # Проверка статуса ответа на попытку создания дубликата
-        assert duplicate_response.status_code == 409  # Ожидаем статус 409 Conflict
+        assert duplicate_response.status_code == 409 and response_json.get("message") == "Этот логин уже используется. Попробуйте другой." # Ожидаем статус 409 Conflict и сообщение
 
     @allure.title("Test Successful Courier Creation")
     @allure.description("Verify that the response contains {'ok': true} after successful registration.")
